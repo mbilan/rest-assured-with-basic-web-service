@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/database_for_tests
+    username: postgres
+    password: mysecretpassword
+
+    hikari:
+      maximum-pool-size: 15
+      connection-timeout: 20000
+      minimum-idle: 10
+      idle-timeout: 10000
+      max-lifetime: 1000
+      auto-commit: true
+
+api:
+  base-url: "http://localhost:8080"
+  base-path: "/api"
+  userName: adminUser
+  password: superSecret

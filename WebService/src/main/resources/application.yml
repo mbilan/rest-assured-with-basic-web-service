@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER_NAME}
+    password: ${DATABASE_PSWD}
+
+    hikari:
+     maximum-pool-size: 15
+     connection-timeout: 20000
+     minimum-idle: 10
+     idle-timeout: 10000
+     max-lifetime: 1000
+     auto-commit: true
+
+
+  flyway:
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+

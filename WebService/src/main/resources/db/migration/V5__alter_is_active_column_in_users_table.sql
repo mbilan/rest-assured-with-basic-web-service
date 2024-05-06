@@ -1,0 +1,5 @@
+ALTER TABLE USERS ALTER COLUMN is_active set default false;
+
+UPDATE USERS SET is_active=false WHERE is_active IS NULL;
+
+ALTER TABLE USERS ALTER COLUMN is_active SET NOT NULL
