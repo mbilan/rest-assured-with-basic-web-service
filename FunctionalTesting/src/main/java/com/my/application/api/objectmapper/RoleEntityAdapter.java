@@ -1,4 +1,4 @@
-package request.objectmapper;
+package com.my.application.api.objectmapper;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

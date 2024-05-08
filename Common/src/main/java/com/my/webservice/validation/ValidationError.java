@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ValidationError {
   ACCESS_DENIED_FOR_REQUESTED_USER("You don't have access to requested user"),
-  USER_NOT_FOUND("User with userName %s was not found");
+  USER_NOT_FOUND("User with userName %s was not found"),
+  USER_ALREADY_EXIST("User with userName %s already exists");
 
-  public final String errorMsg;
+  private final String errorMsg;
 }

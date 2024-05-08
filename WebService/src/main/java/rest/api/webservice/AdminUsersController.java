@@ -1,5 +1,7 @@
 package rest.api.webservice;
 
+import static com.my.webservice.validation.ValidationError.USER_ALREADY_EXIST;
+import static rest.api.util.LocationBuilder.generateLocation;
 import static rest.api.validation.RolesValidator.validateRoleName;
 
 import com.my.webservice.entity.User;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 import rest.api.service.UserService;
 
 @RequiredArgsConstructor
@@ -32,24 +33,18 @@ public class AdminUsersController {
     if (userService.getUserByUsername(user.getUserName()).isPresent()) {
       return new ResponseEntity<>(
           UserResponse.builder()
-              .errorMessage("User with userName + " + user.getUserName() + " already exists")
+              .errorMessage(String.format(USER_ALREADY_EXIST.getErrorMsg(), user.getUserName()))
               .build(),
           HttpStatus.CONFLICT);
     }
     User savedUser = userService.saveUser(user);
 
-    URI location =
-        UriComponentsBuilder.fromPath("/api/public/users/{userId}")
-            .scheme(request.getScheme())
-            .host(request.getServerName())
-            .port(request.getServerPort())
-            .buildAndExpand(user.getUserName())
-            .toUri();
+    URI location = generateLocation(request, user.getUserName());
     return ResponseEntity.created(location).body(UserResponse.fromUser(savedUser));
   }
 
   @PutMapping("/users/{userName}/roles/{roleName}")
-  public ResponseEntity<UserResponse> createUser(
+  public ResponseEntity<UserResponse> updateUserRole(
       @PathVariable(name = "userName") String userName,
       @PathVariable(name = "roleName") String roleName) {
     try {
