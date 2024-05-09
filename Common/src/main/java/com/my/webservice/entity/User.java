@@ -22,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Builder
+@Builder(toBuilder=true)
 @Table(name = "users")
 public class User {
 
