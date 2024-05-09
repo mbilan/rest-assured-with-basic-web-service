@@ -30,8 +30,7 @@ response :
 ```
 
 **FunctionalTesting** module contains tests that have been written on Junit5 + REST Assured, Spring boot (for DB interaction).
-For running tests, you need to set correct value in application.yml. 
-
+For running tests, you need to set correct value in src/test/resources/application.yml. 
 
 
 The tests result will have follow view : 
