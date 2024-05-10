@@ -1,25 +1,29 @@
-package com.my.application.api;
+package com.my.application.api.client;
 
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
 
+import com.my.application.api.request.RequestBuilder;
 import com.my.webservice.entity.Role;
 import com.my.webservice.entity.User;
 import com.my.webservice.entity.UserResponse;
-import io.restassured.specification.RequestSpecification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class AdminUsersClient {
 
+  private final RequestBuilder requestBuilder;
   /**
    * POST /api/admin/users
    *
-   * @param userSpec - RequestSpecification with user basic authorization
    * @param postBody - body for post request
    * @return Response from server
    */
-  public static User postUser(RequestSpecification userSpec, User postBody) {
-    return given(userSpec)
+  public User postUser(User postBody) {
+    return given(requestBuilder.adminScopeReqSpec())
         .body(postBody)
         .when()
         .post("/admin/users")
@@ -32,13 +36,12 @@ public class AdminUsersClient {
 
   /**
    * PUT /api/admin/users/{userName}/roles/{roleName}
-   * @param userSpec - RequestSpecification with user basic authorization
    * @param userName - target userName
    * @param role - new role for user
    * @return Response from server
    */
-  public static UserResponse putUserRole(RequestSpecification userSpec, String userName, Role role) {
-    return given(userSpec)
+  public UserResponse putUserRole(String userName, Role role) {
+    return given(requestBuilder.adminScopeReqSpec())
         .when()
         .put("/admin/users/{userName}/roles/{roleName}", userName, role.name())
         .then()

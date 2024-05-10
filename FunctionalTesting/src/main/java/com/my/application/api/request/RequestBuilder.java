@@ -1,9 +1,9 @@
-package com.my.application.api;
+package com.my.application.api.request;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.my.application.api.objectmapper.LocalDateTypeAdapter;
-import com.my.application.api.objectmapper.RoleEntityAdapter;
+import com.my.application.api.request.objectmapper.LocalDateTypeAdapter;
+import com.my.application.api.request.objectmapper.RoleEntityAdapter;
 import com.my.webservice.entity.RoleEntity;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -22,19 +22,16 @@ import org.springframework.stereotype.Component;
 public class RequestBuilder {
   private final String baseUrl;
   private final String basePath;
-  private final String userName;
-  private final String password;
+  private final CredentialsProvider credentialsProvider;
 
   @Autowired
   public RequestBuilder(
       @Value("${api.base-url}") String baseUrl,
       @Value("${api.base-path}") String basePath,
-      @Value("${api.userName}") String apiUserName,
-      @Value("${api.password}") String password) {
+      CredentialsProvider credentialsProvider) {
     this.baseUrl = baseUrl;
     this.basePath = basePath;
-    this.userName = apiUserName;
-    this.password = password;
+    this.credentialsProvider = credentialsProvider;
   }
 
   public RequestSpecification baseRequestSpec() {
@@ -47,8 +44,18 @@ public class RequestBuilder {
         .build();
   }
 
-  public RequestSpecification authorizedReqSpec() {
-    return baseRequestSpec().auth().basic(userName, password);
+  public RequestSpecification adminScopeReqSpec() {
+    final Credentials credentials = credentialsProvider.getDefaultAdminCredentials();
+    return authorizedRequestSpec(credentials);
+  }
+
+  public RequestSpecification userScopeReqSpec() {
+    final Credentials credentials = credentialsProvider.getDefaultAdminCredentials();
+    return authorizedRequestSpec(credentials);
+  }
+
+  public RequestSpecification authorizedRequestSpec(Credentials credentials) {
+    return baseRequestSpec().auth().basic(credentials.login(), credentials.password());
   }
 
   /** Build custom gson mapper for LocalDateTime and RoleEntity fields; configure logConfig */

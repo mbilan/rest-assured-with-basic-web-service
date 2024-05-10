@@ -1,4 +1,4 @@
-package tests;
+package tests.com.my.application;
 
 import com.my.application.MyApplication;
 import org.junit.jupiter.api.extension.ExtendWith;
